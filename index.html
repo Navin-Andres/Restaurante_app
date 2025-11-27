@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comida Costeña | Sabor Auténtico</title>
+    <meta name="description" content="Auténtica comida costeña colombiana. Pide en línea tus favoritos.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- 
+    INSTRUCCIONES DE CONFIGURACIÓN:
+    1. Para cambiar el número de WhatsApp, abre 'app.js' y busca la constante 'RESTAURANT_PHONE'.
+    2. Para añadir productos, edita el array 'menuData' en 'app.js'.
+    3. Para cambiar los colores, edita las variables :root en 'styles.css'.
+    -->
+</head>
+
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo-container">
+                <h1 class="logo">Comida Costeña</h1>
+                <p class="tagline">El verdadero sabor del Caribe</p>
+            </div>
+            <button id="cart-btn" class="cart-btn" aria-label="Ver carrito">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1" />
+                    <circle cx="20" cy="21" r="1" />
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                </svg>
+                <span id="cart-count" class="cart-count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="main-content container">
+        <!-- Category Navigation -->
+        <nav class="category-nav" aria-label="Categorías del menú">
+            <button class="category-btn active" data-category="all">Todos</button>
+            <button class="category-btn" data-category="entradas">Entradas</button>
+            <button class="category-btn" data-category="principales">Principales</button>
+            <button class="category-btn" data-category="bebidas">Bebidas</button>
+            <button class="category-btn" data-category="postres">Postres</button>
+        </nav>
+
+        <!-- Menu Grid -->
+        <section id="menu-grid" class="menu-grid">
+            <!-- Items will be injected here by JS -->
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Comida Costeña. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Cart Modal/Drawer -->
+    <div id="cart-modal" class="cart-modal" aria-hidden="true">
+        <div class="cart-overlay" id="cart-overlay"></div>
+        <div class="cart-content">
+            <header class="cart-header">
+                <h2>Tu Pedido</h2>
+                <button id="close-cart" class="close-btn" aria-label="Cerrar carrito">&times;</button>
+            </header>
+
+            <div class="cart-items" id="cart-items">
+                <!-- Cart items will be injected here -->
+                <p class="empty-cart-msg">Tu carrito está vacío.</p>
+            </div>
+
+            <div class="cart-footer">
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Total:</span>
+                        <span id="cart-total" class="total-price">$0</span>
+                    </div>
+                </div>
+
+                <form id="checkout-form" class="checkout-form">
+                    <div class="form-group">
+                        <label for="customer-name">Nombre</label>
+                        <input type="text" id="customer-name" required placeholder="Tu nombre">
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-address">Dirección / Notas</label>
+                        <textarea id="customer-address" required
+                            placeholder="Dirección de entrega o notas especiales"></textarea>
+                    </div>
+                    <button type="submit" class="whatsapp-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-8.683-2.031-.967-.272-.297-.471-.421-.644-.421-.174 0-.446.009-.694.033-.248.025-.645.099-.992.471-.347.371-1.339 1.311-1.339 3.198 0 1.886 1.364 3.711 1.563 3.982.198.272 2.705 4.131 6.535 5.793 2.705 1.174 3.263.943 3.858.893.595-.05 1.908-.793 2.181-1.562.273-.768.273-1.437.198-1.561z" />
+                        </svg>
+                        Enviar Pedido por WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
