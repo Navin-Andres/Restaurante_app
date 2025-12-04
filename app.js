@@ -9,7 +9,7 @@ const menuData = [
         title: "Arepa de Huevo",
         category: "entradas",
         price: 8000,
-        img: "https://images.unsplash.com/photo-1607301405390-d831c242f59b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        img: "assets/arepa con huevo.jpg",
         desc: "Tradicional arepa de maíz amarillo rellena con huevo y carne molida."
     },
     {
@@ -17,7 +17,7 @@ const menuData = [
         title: "Carimañolas",
         category: "entradas",
         price: 12000,
-        img: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        img: "assets/carimañola.jpg",
         desc: "Pastelitos de yuca fritos rellenos de queso costeño o carne."
     },
     {
@@ -25,7 +25,7 @@ const menuData = [
         title: "Patacones con Queso",
         category: "entradas",
         price: 10000,
-        img: "https://images.unsplash.com/photo-1625937329635-6e7a304cd251?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        img: "assets/patacones con queso.jpg",
         desc: "Plátano verde frito aplanado cubierto con abundante queso costeño rallado."
     },
     {
@@ -33,7 +33,7 @@ const menuData = [
         title: "Mojarra Frita",
         category: "principales",
         price: 35000,
-        img: "https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        img: "assets/mojarra frita.jpg",
         desc: "Mojarra entera frita acompañada de arroz con coco, patacones y ensalada."
     },
     {
@@ -41,7 +41,7 @@ const menuData = [
         title: "Cazuela de Mariscos",
         category: "principales",
         price: 45000,
-        img: "https://images.unsplash.com/photo-1559847844-5315695dadae?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        img: "assets/cazuela con marisco.jpg",
         desc: "Cremosa sopa de mariscos frescos con leche de coco y especias."
     },
     {
@@ -49,7 +49,7 @@ const menuData = [
         title: "Arroz con Camarones",
         category: "principales",
         price: 38000,
-        img: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        img: "assets/arroz con camarones.jpg",
         desc: "Arroz húmedo salteado con camarones frescos y vegetales."
     },
     {
@@ -57,7 +57,7 @@ const menuData = [
         title: "Cocadas",
         category: "postres",
         price: 5000,
-        img: "https://images.unsplash.com/photo-1579372786545-d24232daf58c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        img: "assets/cocadas.jpg",
         desc: "Dulce tradicional de coco rallado y panela."
     },
     {
@@ -65,7 +65,7 @@ const menuData = [
         title: "Enyucado",
         category: "postres",
         price: 8000,
-        img: "https://images.unsplash.com/photo-1598511757337-fe2cafc31ba0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        img: "assets/enyucados.jpg",
         desc: "Pastel de yuca, coco, queso y anís."
     },
     {
@@ -73,7 +73,7 @@ const menuData = [
         title: "Limonada de Coco",
         category: "bebidas",
         price: 12000,
-        img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        img: "assets/limonada de coco.jpg",
         desc: "Bebida refrescante y cremosa de limón y leche de coco."
     },
     {
@@ -81,7 +81,7 @@ const menuData = [
         title: "Jugo de Corozo",
         category: "bebidas",
         price: 8000,
-        img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+        img: "assets/jugo de corozo.jpg",
         desc: "Jugo natural de corozo, dulce y refrescante."
     }
 ];
