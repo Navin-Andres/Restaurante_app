@@ -114,7 +114,7 @@ let deferredInstallPrompt = null;
 document.addEventListener("DOMContentLoaded", () => {
     renderMenu("all");
     updateCartUI();
-    showDefaultInstallBanner();
+    maybeShowInstallBannerOnLoad();
 });
 
 // Renderizar Menú
@@ -301,7 +301,7 @@ function hideInstallBanner() {
     document.body.classList.remove("has-install-banner");
 }
 
-function maybeShowIosInstallBanner() {
+function maybeShowInstallBannerOnLoad() {
     const isSafari = /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
 
     if (isIos && isSafari && !isStandalone) {
@@ -309,20 +309,17 @@ function maybeShowIosInstallBanner() {
         if (installAppBtn) {
             installAppBtn.textContent = "Como instalar";
         }
-    }
-}
-
-function showDefaultInstallBanner() {
-    if (isIos) {
-        maybeShowIosInstallBanner();
         return;
     }
 
-    if (installAppBtn) {
-        installAppBtn.textContent = "Descargar app";
+    // En Android/Chrome el prompt nativo puede tardar en disparar.
+    // Mostramos el banner desde el inicio y luego usamos beforeinstallprompt cuando llegue.
+    if (!isStandalone && isMobileViewport()) {
+        showInstallBanner("Instala la app para hacer tus pedidos mas rapido.");
+        if (installAppBtn) {
+            installAppBtn.textContent = "Descargar app";
+        }
     }
-
-    showInstallBanner("Instala la app para pedir mas rapido desde tu pantalla principal.");
 }
 
 window.addEventListener("beforeinstallprompt", (event) => {
@@ -352,10 +349,7 @@ if (installAppBtn) {
 
         if (isIos) {
             alert("Para instalar en iPhone: boton Compartir -> Agregar a pantalla de inicio.");
-            return;
         }
-
-        alert("Para instalar en Android: abre el menu del navegador y toca 'Instalar app' o 'Agregar a pantalla principal'.");
     });
 }
 
