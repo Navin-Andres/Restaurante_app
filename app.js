@@ -105,7 +105,6 @@ const installBannerText = document.getElementById("install-banner-text");
 const installAppBtn = document.getElementById("install-app-btn");
 const closeInstallBannerBtn = document.getElementById("close-install-banner");
 
-const INSTALL_BANNER_DISMISSED_KEY = "installBannerDismissed";
 const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
 const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
 
@@ -285,12 +284,8 @@ function isMobileViewport() {
     return window.matchMedia("(max-width: 768px)").matches;
 }
 
-function wasInstallBannerDismissed() {
-    return localStorage.getItem(INSTALL_BANNER_DISMISSED_KEY) === "true";
-}
-
 function showInstallBanner(text) {
-    if (!installBanner || !installBannerText || !isMobileViewport() || isStandalone || wasInstallBannerDismissed()) {
+    if (!installBanner || !installBannerText || !isMobileViewport() || isStandalone) {
         return;
     }
 
@@ -299,15 +294,11 @@ function showInstallBanner(text) {
     document.body.classList.add("has-install-banner");
 }
 
-function hideInstallBanner(rememberChoice) {
+function hideInstallBanner() {
     if (!installBanner) return;
 
     installBanner.hidden = true;
     document.body.classList.remove("has-install-banner");
-
-    if (rememberChoice) {
-        localStorage.setItem(INSTALL_BANNER_DISMISSED_KEY, "true");
-    }
 }
 
 function maybeShowIosInstallBanner() {
@@ -339,7 +330,7 @@ if (installAppBtn) {
             const result = await deferredInstallPrompt.userChoice;
 
             if (result.outcome === "accepted") {
-                hideInstallBanner(true);
+                hideInstallBanner();
             }
 
             deferredInstallPrompt = null;
@@ -354,12 +345,12 @@ if (installAppBtn) {
 
 if (closeInstallBannerBtn) {
     closeInstallBannerBtn.addEventListener("click", () => {
-        hideInstallBanner(true);
+        hideInstallBanner();
     });
 }
 
 window.addEventListener("appinstalled", () => {
-    hideInstallBanner(true);
+    hideInstallBanner();
     deferredInstallPrompt = null;
 });
 
