@@ -105,6 +105,7 @@ const installBannerText = document.getElementById("install-banner-text");
 const installAppBtn = document.getElementById("install-app-btn");
 const closeInstallBannerBtn = document.getElementById("close-install-banner");
 const INSTALL_BANNER_DISMISSED_KEY = "installBannerDismissed";
+const INSTALL_BANNER_DELAY_MS = 3000;
 
 const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
 const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
@@ -296,7 +297,7 @@ function showInstallBanner(text) {
     document.body.classList.add("has-install-banner");
 }
 
-function scheduleInstallBanner(text, delayMs = 2000) {
+function scheduleInstallBanner(text, delayMs = INSTALL_BANNER_DELAY_MS) {
     if (installBannerTimer) {
         clearTimeout(installBannerTimer);
     }
