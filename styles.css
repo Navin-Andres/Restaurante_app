@@ -442,14 +442,14 @@ body {
 
 /* Install Banner */
 body.has-install-banner {
-    padding-top: 95px;
+    padding-top: 82px;
 }
 
 .install-banner {
     position: fixed;
     left: 12px;
     right: 12px;
-    top: 84px;
+    top: 8px;
     bottom: auto;
     z-index: 1200;
     background: linear-gradient(135deg, #ff7f50, #ff995d);
@@ -486,7 +486,15 @@ body.has-install-banner {
     font-size: 1.5rem;
     line-height: 1;
     cursor: pointer;
-    padding: 0 0.2rem;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    padding: 0;
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+.close-install-banner:hover {
+    background-color: rgba(255, 255, 255, 0.24);
 }
 
 /* Responsive */
@@ -502,6 +510,6 @@ body.has-install-banner {
 
 @media (min-width: 769px) {
     body.has-install-banner {
-        padding-top: 95px;
+        padding-top: 82px;
     }
 }

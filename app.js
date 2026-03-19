@@ -104,6 +104,7 @@ const installBanner = document.getElementById("install-banner");
 const installBannerText = document.getElementById("install-banner-text");
 const installAppBtn = document.getElementById("install-app-btn");
 const closeInstallBannerBtn = document.getElementById("close-install-banner");
+const INSTALL_BANNER_DISMISSED_KEY = "installBannerDismissed";
 
 const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
 const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
@@ -285,7 +286,7 @@ function isMobileViewport() {
 }
 
 function showInstallBanner(text) {
-    if (!installBanner || !installBannerText || isStandalone) {
+    if (!installBanner || !installBannerText || isStandalone || isInstallBannerDismissed()) {
         return;
     }
 
@@ -299,6 +300,10 @@ function hideInstallBanner() {
 
     installBanner.hidden = true;
     document.body.classList.remove("has-install-banner");
+}
+
+function isInstallBannerDismissed() {
+    return localStorage.getItem(INSTALL_BANNER_DISMISSED_KEY) === "true";
 }
 
 function maybeShowInstallBannerOnLoad() {
@@ -355,11 +360,13 @@ if (installAppBtn) {
 
 if (closeInstallBannerBtn) {
     closeInstallBannerBtn.addEventListener("click", () => {
+        localStorage.setItem(INSTALL_BANNER_DISMISSED_KEY, "true");
         hideInstallBanner();
     });
 }
 
 window.addEventListener("appinstalled", () => {
+    localStorage.removeItem(INSTALL_BANNER_DISMISSED_KEY);
     hideInstallBanner();
     deferredInstallPrompt = null;
 });
