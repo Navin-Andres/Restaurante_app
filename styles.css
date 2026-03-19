@@ -442,14 +442,14 @@ body {
 
 /* Install Banner */
 body.has-install-banner {
-    padding-top: 82px;
+    padding-top: 88px;
 }
 
 .install-banner {
     position: fixed;
     left: 12px;
     right: 12px;
-    top: 8px;
+    top: 92px;
     bottom: auto;
     z-index: 1200;
     background: linear-gradient(135deg, #ff7f50, #ff995d);
@@ -510,6 +510,6 @@ body.has-install-banner {
 
 @media (min-width: 769px) {
     body.has-install-banner {
-        padding-top: 82px;
+        padding-top: 88px;
     }
 }

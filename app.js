@@ -110,6 +110,7 @@ const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
 const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
 
 let deferredInstallPrompt = null;
+let installBannerTimer = null;
 
 // Inicialización
 document.addEventListener("DOMContentLoaded", () => {
@@ -295,8 +296,24 @@ function showInstallBanner(text) {
     document.body.classList.add("has-install-banner");
 }
 
+function scheduleInstallBanner(text, delayMs = 2000) {
+    if (installBannerTimer) {
+        clearTimeout(installBannerTimer);
+    }
+
+    installBannerTimer = setTimeout(() => {
+        showInstallBanner(text);
+        installBannerTimer = null;
+    }, delayMs);
+}
+
 function hideInstallBanner() {
     if (!installBanner) return;
+
+    if (installBannerTimer) {
+        clearTimeout(installBannerTimer);
+        installBannerTimer = null;
+    }
 
     installBanner.hidden = true;
     document.body.classList.remove("has-install-banner");
@@ -310,7 +327,7 @@ function maybeShowInstallBannerOnLoad() {
     const isSafari = /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
 
     if (isIos && isSafari && !isStandalone) {
-        showInstallBanner("En iPhone: toca Compartir y luego 'Agregar a pantalla de inicio'.");
+        scheduleInstallBanner("En iPhone: toca Compartir y luego 'Agregar a pantalla de inicio'.");
         if (installAppBtn) {
             installAppBtn.textContent = "Como instalar";
         }
@@ -320,7 +337,7 @@ function maybeShowInstallBannerOnLoad() {
     // En Android/Chrome el prompt nativo puede tardar en disparar.
     // Mostramos el banner desde el inicio y luego usamos beforeinstallprompt cuando llegue.
     if (!isStandalone) {
-        showInstallBanner("Instala la app para hacer tus pedidos mas rapido.");
+        scheduleInstallBanner("Instala la app para hacer tus pedidos mas rapido.");
         if (installAppBtn) {
             installAppBtn.textContent = "Descargar app";
         }
@@ -335,7 +352,7 @@ window.addEventListener("beforeinstallprompt", (event) => {
         installAppBtn.textContent = "Descargar app";
     }
 
-    showInstallBanner("Instala la app para hacer tus pedidos más rapido.");
+    scheduleInstallBanner("Instala la app para hacer tus pedidos más rapido.");
 });
 
 if (installAppBtn) {
