@@ -114,7 +114,7 @@ let deferredInstallPrompt = null;
 document.addEventListener("DOMContentLoaded", () => {
     renderMenu("all");
     updateCartUI();
-    maybeShowIosInstallBanner();
+    showDefaultInstallBanner();
 });
 
 // Renderizar Menú
@@ -312,6 +312,19 @@ function maybeShowIosInstallBanner() {
     }
 }
 
+function showDefaultInstallBanner() {
+    if (isIos) {
+        maybeShowIosInstallBanner();
+        return;
+    }
+
+    if (installAppBtn) {
+        installAppBtn.textContent = "Descargar app";
+    }
+
+    showInstallBanner("Instala la app para pedir mas rapido desde tu pantalla principal.");
+}
+
 window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     deferredInstallPrompt = event;
@@ -339,7 +352,10 @@ if (installAppBtn) {
 
         if (isIos) {
             alert("Para instalar en iPhone: boton Compartir -> Agregar a pantalla de inicio.");
+            return;
         }
+
+        alert("Para instalar en Android: abre el menu del navegador y toca 'Instalar app' o 'Agregar a pantalla principal'.");
     });
 }
 
