@@ -240,7 +240,7 @@ checkoutForm.addEventListener("submit", (e) => {
     const address = document.getElementById("customer-address").value;
 
     const message = generateWhatsAppMessage(name, address);
-    const whatsappUrl = `https://wa.me/${3159057387}?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/${RESTAURANT_PHONE}?text=${encodeURIComponent(message)}`;
 
 
     window.open(whatsappUrl, "_blank");
@@ -273,3 +273,17 @@ function formatPrice(price) {
 // Exponer funciones al scope global para los onclick del HTML
 window.addToCart = addToCart;
 window.updateQty = updateQty;
+
+// Registro del Service Worker para PWA
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker
+            .register("./service-worker.js")
+            .then(() => {
+                console.log("Service Worker registrado correctamente.");
+            })
+            .catch((error) => {
+                console.error("Error al registrar el Service Worker:", error);
+            });
+    });
+}
