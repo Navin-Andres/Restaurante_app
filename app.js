@@ -104,20 +104,21 @@ const installBanner = document.getElementById("install-banner");
 const installBannerText = document.getElementById("install-banner-text");
 const installAppBtn = document.getElementById("install-app-btn");
 const closeInstallBannerBtn = document.getElementById("close-install-banner");
-const INSTALL_BANNER_DISMISSED_KEY = "installBannerDismissed";
-const INSTALL_BANNER_DELAY_MS = 3000;
+const openInstallBannerBtn = document.getElementById("open-install-banner");
 
 const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
 const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
 
 let deferredInstallPrompt = null;
-let installBannerTimer = null;
 
 // Inicialización
 document.addEventListener("DOMContentLoaded", () => {
     renderMenu("all");
     updateCartUI();
-    maybeShowInstallBannerOnLoad();
+
+    if (isStandalone && openInstallBannerBtn) {
+        openInstallBannerBtn.hidden = true;
+    }
 });
 
 // Renderizar Menú
@@ -288,47 +289,36 @@ function isMobileViewport() {
 }
 
 function showInstallBanner(text) {
-    if (!installBanner || !installBannerText || isStandalone || isInstallBannerDismissed()) {
+    if (!installBanner || !installBannerText || isStandalone) {
         return;
     }
 
     installBannerText.textContent = text;
     installBanner.hidden = false;
+    installBanner.classList.remove("is-closing");
+    requestAnimationFrame(() => {
+        installBanner.classList.add("is-visible");
+    });
     document.body.classList.add("has-install-banner");
-}
-
-function scheduleInstallBanner(text, delayMs = INSTALL_BANNER_DELAY_MS) {
-    if (installBannerTimer) {
-        clearTimeout(installBannerTimer);
-    }
-
-    installBannerTimer = setTimeout(() => {
-        showInstallBanner(text);
-        installBannerTimer = null;
-    }, delayMs);
 }
 
 function hideInstallBanner() {
     if (!installBanner) return;
 
-    if (installBannerTimer) {
-        clearTimeout(installBannerTimer);
-        installBannerTimer = null;
-    }
-
-    installBanner.hidden = true;
+    installBanner.classList.remove("is-visible");
+    installBanner.classList.add("is-closing");
+    setTimeout(() => {
+        installBanner.hidden = true;
+        installBanner.classList.remove("is-closing");
+    }, 280);
     document.body.classList.remove("has-install-banner");
-}
-
-function isInstallBannerDismissed() {
-    return localStorage.getItem(INSTALL_BANNER_DISMISSED_KEY) === "true";
 }
 
 function maybeShowInstallBannerOnLoad() {
     const isSafari = /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
 
     if (isIos && isSafari && !isStandalone) {
-        scheduleInstallBanner("En iPhone: toca Compartir y luego 'Agregar a pantalla de inicio'.");
+        showInstallBanner("En iPhone: toca Compartir y luego 'Agregar a pantalla de inicio'.");
         if (installAppBtn) {
             installAppBtn.textContent = "Como instalar";
         }
@@ -338,7 +328,7 @@ function maybeShowInstallBannerOnLoad() {
     // En Android/Chrome el prompt nativo puede tardar en disparar.
     // Mostramos el banner desde el inicio y luego usamos beforeinstallprompt cuando llegue.
     if (!isStandalone) {
-        scheduleInstallBanner("Instala la app para hacer tus pedidos mas rapido.");
+        showInstallBanner("Instala la app para hacer tus pedidos mas rapido.");
         if (installAppBtn) {
             installAppBtn.textContent = "Descargar app";
         }
@@ -353,8 +343,29 @@ window.addEventListener("beforeinstallprompt", (event) => {
         installAppBtn.textContent = "Descargar app";
     }
 
-    scheduleInstallBanner("Instala la app para hacer tus pedidos más rapido.");
+    if (openInstallBannerBtn && !isStandalone) {
+        openInstallBannerBtn.hidden = false;
+    }
 });
+
+if (openInstallBannerBtn) {
+    openInstallBannerBtn.addEventListener("click", () => {
+        const isSafari = /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
+
+        if (isIos && isSafari && !isStandalone) {
+            if (installAppBtn) {
+                installAppBtn.textContent = "Como instalar";
+            }
+            showInstallBanner("En iPhone: toca Compartir y luego 'Agregar a pantalla de inicio'.");
+            return;
+        }
+
+        if (installAppBtn) {
+            installAppBtn.textContent = "Descargar app";
+        }
+        showInstallBanner("Instala la app para hacer tus pedidos más rapido.");
+    });
+}
 
 if (installAppBtn) {
     installAppBtn.addEventListener("click", async () => {
@@ -378,13 +389,11 @@ if (installAppBtn) {
 
 if (closeInstallBannerBtn) {
     closeInstallBannerBtn.addEventListener("click", () => {
-        localStorage.setItem(INSTALL_BANNER_DISMISSED_KEY, "true");
         hideInstallBanner();
     });
 }
 
 window.addEventListener("appinstalled", () => {
-    localStorage.removeItem(INSTALL_BANNER_DISMISSED_KEY);
     hideInstallBanner();
     deferredInstallPrompt = null;
 });

@@ -461,6 +461,19 @@ body.has-install-banner {
     grid-template-columns: 1fr auto auto;
     gap: 10px;
     align-items: center;
+    opacity: 0;
+    transform: translateY(-16px);
+    transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.install-banner.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.install-banner.is-closing {
+    opacity: 0;
+    transform: translateY(-20px);
 }
 
 .install-banner-text {
@@ -495,6 +508,26 @@ body.has-install-banner {
 
 .close-install-banner:hover {
     background-color: rgba(255, 255, 255, 0.24);
+}
+
+.open-install-banner {
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    z-index: 1190;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff7f50, #ff995d);
+    color: #ffffff;
+    font-family: var(--font-body);
+    font-weight: 700;
+    padding: 0.78rem 1rem;
+    cursor: pointer;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+}
+
+.open-install-banner:hover {
+    transform: translateY(-1px);
 }
 
 /* Responsive */
