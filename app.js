@@ -100,11 +100,22 @@ const cartOverlay = document.getElementById("cart-overlay");
 const cartItemsContainer = document.getElementById("cart-items");
 const cartTotalElement = document.getElementById("cart-total");
 const checkoutForm = document.getElementById("checkout-form");
+const installBanner = document.getElementById("install-banner");
+const installBannerText = document.getElementById("install-banner-text");
+const installAppBtn = document.getElementById("install-app-btn");
+const closeInstallBannerBtn = document.getElementById("close-install-banner");
+
+const INSTALL_BANNER_DISMISSED_KEY = "installBannerDismissed";
+const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+
+let deferredInstallPrompt = null;
 
 // Inicialización
 document.addEventListener("DOMContentLoaded", () => {
     renderMenu("all");
     updateCartUI();
+    maybeShowIosInstallBanner();
 });
 
 // Renderizar Menú
@@ -269,6 +280,88 @@ function generateWhatsAppMessage(name, address) {
 function formatPrice(price) {
     return CURRENCY_SYMBOL + price.toLocaleString("es-CO");
 }
+
+function isMobileViewport() {
+    return window.matchMedia("(max-width: 768px)").matches;
+}
+
+function wasInstallBannerDismissed() {
+    return localStorage.getItem(INSTALL_BANNER_DISMISSED_KEY) === "true";
+}
+
+function showInstallBanner(text) {
+    if (!installBanner || !installBannerText || !isMobileViewport() || isStandalone || wasInstallBannerDismissed()) {
+        return;
+    }
+
+    installBannerText.textContent = text;
+    installBanner.hidden = false;
+    document.body.classList.add("has-install-banner");
+}
+
+function hideInstallBanner(rememberChoice) {
+    if (!installBanner) return;
+
+    installBanner.hidden = true;
+    document.body.classList.remove("has-install-banner");
+
+    if (rememberChoice) {
+        localStorage.setItem(INSTALL_BANNER_DISMISSED_KEY, "true");
+    }
+}
+
+function maybeShowIosInstallBanner() {
+    const isSafari = /^((?!chrome|android).)*safari/i.test(window.navigator.userAgent);
+
+    if (isIos && isSafari && !isStandalone) {
+        showInstallBanner("En iPhone: toca Compartir y luego 'Agregar a pantalla de inicio'.");
+        if (installAppBtn) {
+            installAppBtn.textContent = "Como instalar";
+        }
+    }
+}
+
+window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+
+    if (installAppBtn) {
+        installAppBtn.textContent = "Descargar app";
+    }
+
+    showInstallBanner("Instala la app para hacer tus pedidos más rapido.");
+});
+
+if (installAppBtn) {
+    installAppBtn.addEventListener("click", async () => {
+        if (deferredInstallPrompt) {
+            deferredInstallPrompt.prompt();
+            const result = await deferredInstallPrompt.userChoice;
+
+            if (result.outcome === "accepted") {
+                hideInstallBanner(true);
+            }
+
+            deferredInstallPrompt = null;
+            return;
+        }
+
+        if (isIos) {
+            alert("Para instalar en iPhone: boton Compartir -> Agregar a pantalla de inicio.");
+        }
+    });
+}
+
+if (closeInstallBannerBtn) {
+    closeInstallBannerBtn.addEventListener("click", () => {
+        hideInstallBanner(true);
+    });
+}
+
+window.addEventListener("appinstalled", () => {
+    hideInstallBanner(true);
+    deferredInstallPrompt = null;
+});
 
 // Exponer funciones al scope global para los onclick del HTML
 window.addToCart = addToCart;
