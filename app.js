@@ -285,7 +285,7 @@ function isMobileViewport() {
 }
 
 function showInstallBanner(text) {
-    if (!installBanner || !installBannerText || !isMobileViewport() || isStandalone) {
+    if (!installBanner || !installBannerText || isStandalone) {
         return;
     }
 
@@ -314,7 +314,7 @@ function maybeShowInstallBannerOnLoad() {
 
     // En Android/Chrome el prompt nativo puede tardar en disparar.
     // Mostramos el banner desde el inicio y luego usamos beforeinstallprompt cuando llegue.
-    if (!isStandalone && isMobileViewport()) {
+    if (!isStandalone) {
         showInstallBanner("Instala la app para hacer tus pedidos mas rapido.");
         if (installAppBtn) {
             installAppBtn.textContent = "Descargar app";
